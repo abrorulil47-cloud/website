@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Website Statis — Profil & Crawl / Preprocessing Berita</title>
+  <meta name="description" content="Halaman utama berisi profil, link ke halaman crawl berita dan preprocessing berita (simulasi).">
+  <style>
+    :root{--accent:#2563eb;--bg:#f7f9fc;--card:#ffffff;--muted:#6b7280}
+    *{box-sizing:border-box}
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;background:var(--bg);color:#111}
+    header{background:linear-gradient(90deg,rgba(37,99,235,0.12),transparent);padding:28px 20px}
+    .container{max-width:980px;margin:0 auto;padding:18px}
+    .nav{display:flex;gap:12px;align-items:center}
+    .logo{font-weight:700;color:var(--accent)}
+    nav a{padding:8px 12px;border-radius:8px;text-decoration:none;color:var(--accent);font-weight:600}
+    main{padding:18px}
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:20px}
+    .card{background:var(--card);padding:18px;border-radius:14px;box-shadow:0 6px 18px rgba(16,24,40,0.06)}
+    .profile h1{margin:0 0 6px 0}
+    .muted{color:var(--muted);font-size:14px}
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;background:var(--accent);color:white;text-decoration:none;font-weight:600}
+    .small{font-size:13px}
+    ul.meta{padding-left:18px;margin:8px 0}
+    .section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .list{display:flex;flex-direction:column;gap:10px}
+    .article{padding:12px;border-radius:10px;background:#fbfdff;border:1px solid #eef3ff}
+    textarea{width:100%;min-height:140px;padding:10px;border-radius:8px;border:1px solid #d1d5db;resize:vertical}
+    code{background:#f3f4f6;padding:2px 6px;border-radius:6px}
+    footer{padding:18px;text-align:center;color:var(--muted);font-size:13px}
+    @media (max-width:880px){.grid{grid-template-columns:1fr}.nav{gap:8px}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="logo">MyStaticNews</div>
+      <nav style="margin-left:auto">
+        <a href="#home" data-link>Beranda</a>
+        <a href="#crawl" data-link>Crawl Berita</a>
+        <a href="#preprocess" data-link>Preprocessing</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="home" class="grid">
+      <section class="card profile">
+        <h1>Nama Kamu</h1>
+        <div class="muted">Mahasiswa / Data Enthusiast / Web Dev</div>
+        <p style="margin-top:12px">Halo — saya <strong>Nama Kamu</strong>. Ini adalah halaman profil sederhana yang menjadi halaman utama website statis di GitHub Pages. Di sini ada tautan ke halaman untuk <em>crawl</em> berita (simulasi) dan langkah-langkah preprocessing berita.</p>
+        <div style="margin-top:12px">
+          <a class="btn" href="#crawl" data-link>Mulai Crawl (simulasi)</a>
+        </div>
+
+        <hr style="margin:18px 0">
+        <div class="small">
+          <strong>Kontak</strong>
+          <ul class="meta">
+            <li>Email: <code>email@domain.com</code></li>
+            <li>Asal: Surabaya</li>
+            <li>Proyek: Deteksi Hoax & Pemrosesan Teks</li>
+          </ul>
+        </div>
+      </section>
+
+      <aside>
+        <div class="card">
+          <h3>Ringkasan</h3>
+          <p class="muted">Gunakan navigasi untuk membuka halaman Crawl Berita dan Preprocessing. Website ini dibuat statis supaya mudah dipublikasi lewat GitHub Pages.</p>
+          <p style="margin-top:10px"><strong>Fitur:</strong></p>
+          <ul class="meta">
+            <li>Halaman utama: profil & link</li>
+            <li>Crawl Berita: simulasi ambil berita</li>
+            <li>Preprocessing: demo tokenisasi + stopword</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <section id="crawl" class="card" style="margin-top:18px">
+      <div class="section-title">
+        <h2>Crawl Berita (Simulasi)</h2>
+        <div class="muted">Halaman ini menampilkan daftar artikel hasil "crawl" simulasi</div>
+      </div>
+
+      <p class="small">Catatan: karena ini situs statis, fungsi crawl yang sesungguhnya membutuhkan backend (server). Di sini ada tombol <em>Simulasi Crawl</em> yang mengisi daftar artikel contoh. Nanti artikel bisa dikirim ke endpoint backend Anda atau disimpan sebagai JSON.</p>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
+        <button class="btn" id="simulateCrawl">Simulasi Crawl</button>
+        <button id="clearArticles" style="padding:10px 14px;border-radius:10px;border:1px solid #d1d5db;background:white">Bersihkan</button>
+      </div>
+
+      <div id="articles" style="margin-top:14px" class="list">
+        <!-- Artikel akan muncul di sini -->
+      </div>
+    </section>
+
+    <section id="preprocess" class="card" style="margin-top:18px">
+      <div class="section-title">
+        <h2>Preprocessing Berita</h2>
+        <div class="muted">Demo operasi preprocessing: lowercasing, hapus tanda baca, tokenisasi, hapus stopword, dan stemming sederhana (suffix stripping).</div>
+      </div>
+
+      <p class="small">Anda dapat memilih artikel dari hasil "crawl" atau tempel teks artikel di kotak berikut, lalu klik <em>Proses</em>.</p>
+
+      <label class="small">Teks artikel (masukkan / tempel):</label>
+      <textarea id="rawText" placeholder="Tempel isi artikel di sini..."></textarea>
+      <div style="margin-top:10px;display:flex;gap:8px">
+        <button class="btn" id="processBtn">Proses</button>
+        <button id="clearText" style="padding:10px 14px;border-radius:10px;border:1px solid #d1d5db;background:white">Bersihkan</button>
+      </div>
+
+      <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="card small" id="outputLeft">
+          <h4>Hasil Preprocessing</h4>
+          <div id="processedResult">(hasil akan muncul di sini)</div>
+        </div>
+        <div class="card small" id="outputRight">
+          <h4>Token & Stopword</h4>
+          <div id="tokenResult">(token akan muncul di sini)</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    Dibuat untuk dipublikasi di GitHub Pages — letakkan file ini di repository dan aktifkan Pages (branch <code>main</code> / folder <code>/</code> atau <code>/docs</code>).
+  </footer>
+
+  <script>
+    // --- Data sampel untuk simulasi crawl ---
+    const sampleArticles = [
+      {id:1,title:"Perekonomian Tumbuh di Kuartal Ketiga",source:"ContohNews",text:"Perekonomian tumbuh 5% pada kuartal ketiga, didorong oleh ekspor dan investasi sektor teknologi."},
+      {id:2,title:"Peluncuran Program Literasi Digital",source:"BeritaKita",text:"Pemerintah meluncurkan program literasi digital untuk pelajar dan guru di sekolah menengah."},
+      {id:3,title:"Penemuan Teknologi Ramah Lingkungan",source:"TeknoInfo",text:"Startup lokal mengembangkan teknologi baru yang dapat mengurangi emisi karbon dari industri kecil."}
+    ];
+
+    // Navigasi internal (hash linking)
+    document.querySelectorAll('[data-link]').forEach(a=>{
+      a.addEventListener('click',e=>{
+        e.preventDefault();
+        const href = a.getAttribute('href');
+        const id = href.replace('#','');
+        document.getElementById(id).scrollIntoView({behavior:'smooth'});
+      })
+    })
+
+    const articlesDiv = document.getElementById('articles');
+    const simulateBtn = document.getElementById('simulateCrawl');
+    const clearArticles = document.getElementById('clearArticles');
+
+    function renderArticles(list){
+      articlesDiv.innerHTML = '';
+      if(!list.length){ articlesDiv.innerHTML = '<div class="muted">Belum ada artikel. Klik "Simulasi Crawl" untuk mengisi contoh.</div>'; return }
+      list.forEach(a=>{
+        const el = document.createElement('div'); el.className='article';
+        el.innerHTML = `<strong>${a.title}</strong><div class="muted small">${a.source}</div><p style="margin-top:8px">${a.text.slice(0,140)}${a.text.length>140?'...':''}</p>
+          <div style="display:flex;gap:8px;margin-top:6px">
+            <button class="btn" data-id="${a.id}">Kirim ke Preprocessing</button>
+            <a class="small" href="#" data-id="${a.id}" style="align-self:center">Lihat detail</a>
+          </div>`;
+        articlesDiv.appendChild(el);
+      })
+    }
+
+    simulateBtn.addEventListener('click',()=>{
+      renderArticles(sampleArticles);
+    })
+    clearArticles.addEventListener('click',()=>{renderArticles([])});
+
+    // delegasi tombol kirim ke preprocessing
+    articlesDiv.addEventListener('click',e=>{
+      if(e.target.tagName.toLowerCase()==='button'){
+        const id = Number(e.target.dataset.id);
+        const art = sampleArticles.find(x=>x.id===id);
+        if(art){
+          document.getElementById('rawText').value = art.text;
+          document.getElementById('preprocess').scrollIntoView({behavior:'smooth'});
+        }
+      }
+    })
+
+    // --- Preprocessing sederhana di client-side ---
+    const stopwords = new Set(["di","dan","yang","ke","dari","pada","untuk","dengan","sebuah","sebagai","adalah","ini","atau","oleh","sehingga"]);
+
+    function simpleStem(word){
+      // very naive suffix-stripping (contoh educational)
+      return word.replace(/(lah|kah|nya|kan|i|an)$/,'');
+    }
+
+    function preprocess(text){
+      // lowercase
+      let s = text.toLowerCase();
+      // remove punctuation (keep spaces and angka dan huruf)
+      s = s.replace(/[^\p{L}\p{N}\s]/gu,' ');
+      // collapse spaces
+      s = s.replace(/\s+/g,' ').trim();
+      // tokenize
+      const tokens = s.length? s.split(' '):[];
+      // remove stopwords and stem
+      const tokensFiltered = tokens.map(t=>simpleStem(t)).filter(t=>t && !stopwords.has(t));
+      return {original:text,normalized:s,tokens,tokensFiltered};
+    }
+
+    document.getElementById('processBtn').addEventListener('click',()=>{
+      const raw = document.getElementById('rawText').value.trim();
+      if(!raw){ alert('Masukkan teks artikel terlebih dahulu.'); return }
+      const out = preprocess(raw);
+      document.getElementById('processedResult').innerHTML = `
+        <p><strong>Normalized:</strong></p>
+        <div class="muted small">${out.normalized}</div>
+        <hr>
+        <p><strong>Tokens (filter):</strong></p>
+        <div class="small">${out.tokensFiltered.join(', ')}</div>
+      `;
+      document.getElementById('tokenResult').innerHTML = `
+        <p><strong>Semua token:</strong></p>
+        <div class="small">${out.tokens.join(', ')}</div>
+      `;
+    });
+
+    document.getElementById('clearText').addEventListener('click',()=>{
+      document.getElementById('rawText').value='';
+      document.getElementById('processedResult').innerHTML='(hasil akan muncul di sini)';
+      document.getElementById('tokenResult').innerHTML='(token akan muncul di sini)';
+    });
+
+    // inisialisasi
+    renderArticles([]);
+  </script>
+</body>
+</html>
